@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model figura {
+  id            BigInt          @id(map: "figura_id_primary") @unique @default(autoincrement())
+  nombre        String          @db.VarChar(255)
+  idModelo      BigInt
+  idShow        BigInt
+  fechaCompra   DateTime?       @db.Date
+  precio        Int             @default(0)
+  modelo        modelo          @relation(fields: [idModelo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "figura_idmodelo_foreign")
+  show          show            @relation(fields: [idShow], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "figura_idshow_foreign")
+  figuraImagen  figuraImagen[]
+  usuarioFigura usuarioFigura[]
+
+  @@index([id], map: "figura_id_index")
+}
+
+model figuraImagen {
+  id          BigInt  @id(map: "figuraimagen_id_primary") @unique @default(autoincrement())
+  idFigura    BigInt
+  imagenUrl   BigInt?
+  descripcion BigInt
+  figura      figura  @relation(fields: [idFigura], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "figuraimagen_idfigura_foreign")
+}
+
+model marca {
+  id        BigInt   @id(map: "marca_id_primary") @unique @default(autoincrement())
+  nombre    String   @db.VarChar(255)
+  idPais    BigInt
+  idUsuario BigInt?
+  pais      pais     @relation(fields: [idPais], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marca_idpais_foreign")
+  usuario   usuario? @relation(fields: [idUsuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marca_idusuario_foreign")
+  modelo    modelo[]
+}
+
+model modelo {
+  id        BigInt   @id(map: "modelo_id_primary") @unique @default(autoincrement())
+  nombre    String   @db.VarChar(255)
+  idMarca   BigInt
+  idUsuario BigInt?
+  figura    figura[]
+  marca     marca    @relation(fields: [idMarca], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "modelo_idmarca_foreign")
+  usuario   usuario? @relation(fields: [idUsuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "modelo_idusuario_foreign")
+}
+
+model pais {
+  id     BigInt  @id(map: "pais_id_primary") @unique @default(autoincrement())
+  nombre String  @db.VarChar(255)
+  marca  marca[]
+}
+
+model show {
+  id     BigInt   @id(map: "show_id_primary") @unique @default(autoincrement())
+  nombre String   @db.VarChar(255)
+  figura figura[]
+}
+
+model usuario {
+  id            BigInt          @id(map: "usuario_id_primary") @unique @default(autoincrement())
+  nombre        String          @db.VarChar(255)
+  email         String          @db.VarChar(255)
+  password      String          @db.VarChar(255)
+  marca         marca[]
+  modelo        modelo[]
+  usuarioFigura usuarioFigura[]
+}
+
+model usuarioFigura {
+  id        BigInt  @id(map: "usuariofigura_id_primary") @unique @default(autoincrement())
+  idUsuario BigInt
+  idFigura  BigInt
+  figura    figura  @relation(fields: [idFigura], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuariofigura_idfigura_foreign")
+  usuario   usuario @relation(fields: [idUsuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuariofigura_idusuario_foreign")
+}
