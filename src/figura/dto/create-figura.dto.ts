@@ -1,1 +1,10 @@
-export class CreateFiguraDto {}
+
+
+
+
+
+
+export class CreateFiguraDto {
+  nombre: string;
+fechaCompra?: Date;
+}

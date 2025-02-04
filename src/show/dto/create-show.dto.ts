@@ -1,1 +1,9 @@
-export class CreateShowDto {}
+
+
+
+
+
+
+export class CreateShowDto {
+  nombre: string;
+}

@@ -1,1 +1,9 @@
-export class CreateMarcaDto {}
+
+
+
+
+
+
+export class CreateMarcaDto {
+  nombre: string;
+}

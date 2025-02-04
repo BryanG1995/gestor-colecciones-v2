@@ -1,1 +1,9 @@
-export class CreateModeloDto {}
+
+
+
+
+
+
+export class CreateModeloDto {
+  nombre: string;
+}

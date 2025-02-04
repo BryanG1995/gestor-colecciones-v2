@@ -11,6 +11,7 @@ import { ShowModule } from './show/show.module';
 import { UsuarioFiguraModule } from './usuario-figura/usuario-figura.module';
 import { PrismaModule } from './prisma/prisma.module';
 
+
 @Module({
   imports: [UsuarioModule, FiguraModule, FiguraImagenModule, MarcaModule, ModeloModule, PaisModule, ShowModule, UsuarioFiguraModule, PrismaModule,PrismaModule],
   controllers: [AppController],

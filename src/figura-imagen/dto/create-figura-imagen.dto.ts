@@ -1,1 +1,11 @@
-export class CreateFiguraImagenDto {}
+
+
+
+
+
+
+export class CreateFiguraImagenDto {
+    imagenUrl?: bigint;
+  descripcion: bigint;
+  }
+  
