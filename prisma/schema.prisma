@@ -3,9 +3,9 @@ generator client {
 }
 
 generator nestjs-dto {
-  provider = "prisma-generator-nestjs-dto"
-  output   = "../src/generated/dto"
-  noSwagger = true
+  provider       = "prisma-generator-nestjs-dto"
+  output         = "../src/generated/dto"
+  noSwagger      = true
   noDependencies = true
 }
 
@@ -22,6 +22,9 @@ model figura {
   idShow        BigInt
   fechaCompra   DateTime?       @db.Date
   precio        Int             @default(0)
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+  deletedAt     DateTime?       @map("deleted_at") // Soft delete
   modelo        modelo          @relation(fields: [idModelo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "figura_idmodelo_foreign")
   show          show            @relation(fields: [idShow], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "figura_idshow_foreign")
   figuraImagen  figuraImagen[]
@@ -31,43 +34,58 @@ model figura {
 }
 
 model figuraImagen {
-  id          BigInt  @id(map: "figuraimagen_id_primary") @unique @default(autoincrement())
+  id          BigInt    @id(map: "figuraimagen_id_primary") @unique @default(autoincrement())
   idFigura    BigInt
   imagenUrl   BigInt?
   descripcion BigInt
-  figura      figura  @relation(fields: [idFigura], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "figuraimagen_idfigura_foreign")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at") // Soft delete
+  figura      figura    @relation(fields: [idFigura], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "figuraimagen_idfigura_foreign")
 }
 
 model marca {
-  id        BigInt   @id(map: "marca_id_primary") @unique @default(autoincrement())
-  nombre    String   @db.VarChar(255)
+  id        BigInt    @id(map: "marca_id_primary") @unique @default(autoincrement())
+  nombre    String    @db.VarChar(255)
   idPais    BigInt
   idUsuario BigInt?
-  pais      pais     @relation(fields: [idPais], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marca_idpais_foreign")
-  usuario   usuario? @relation(fields: [idUsuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marca_idusuario_foreign")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at") // Soft delete
+  pais      pais      @relation(fields: [idPais], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marca_idpais_foreign")
+  usuario   usuario?  @relation(fields: [idUsuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "marca_idusuario_foreign")
   modelo    modelo[]
 }
 
 model modelo {
-  id        BigInt   @id(map: "modelo_id_primary") @unique @default(autoincrement())
-  nombre    String   @db.VarChar(255)
+  id        BigInt    @id(map: "modelo_id_primary") @unique @default(autoincrement())
+  nombre    String    @db.VarChar(255)
   idMarca   BigInt
   idUsuario BigInt?
   figura    figura[]
-  marca     marca    @relation(fields: [idMarca], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "modelo_idmarca_foreign")
-  usuario   usuario? @relation(fields: [idUsuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "modelo_idusuario_foreign")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at") // Soft delete
+  marca     marca     @relation(fields: [idMarca], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "modelo_idmarca_foreign")
+  usuario   usuario?  @relation(fields: [idUsuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "modelo_idusuario_foreign")
 }
 
 model pais {
-  id     BigInt  @id(map: "pais_id_primary") @unique @default(autoincrement())
-  nombre String  @db.VarChar(255)
-  marca  marca[]
+  id        BigInt    @id(map: "pais_id_primary") @unique @default(autoincrement())
+  nombre    String    @db.VarChar(255)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at") // Soft delete
+  marca     marca[]
 }
 
 model show {
-  id     BigInt   @id(map: "show_id_primary") @unique @default(autoincrement())
-  nombre String   @db.VarChar(255)
-  figura figura[]
+  id        BigInt    @id(map: "show_id_primary") @unique @default(autoincrement())
+  nombre    String    @db.VarChar(255)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at") // Soft delete
+  figura    figura[]
 }
 
 model usuario {
@@ -75,15 +93,21 @@ model usuario {
   nombre        String          @db.VarChar(255)
   email         String          @db.VarChar(255)
   password      String          @db.VarChar(255)
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+  deletedAt     DateTime?       @map("deleted_at") // Soft delete
   marca         marca[]
   modelo        modelo[]
   usuarioFigura usuarioFigura[]
 }
 
 model usuarioFigura {
-  id        BigInt  @id(map: "usuariofigura_id_primary") @unique @default(autoincrement())
+  id        BigInt    @id(map: "usuariofigura_id_primary") @unique @default(autoincrement())
   idUsuario BigInt
   idFigura  BigInt
-  figura    figura  @relation(fields: [idFigura], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuariofigura_idfigura_foreign")
-  usuario   usuario @relation(fields: [idUsuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuariofigura_idusuario_foreign")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at") // Soft delete
+  figura    figura    @relation(fields: [idFigura], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuariofigura_idfigura_foreign")
+  usuario   usuario   @relation(fields: [idUsuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuariofigura_idusuario_foreign")
 }

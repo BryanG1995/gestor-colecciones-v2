@@ -1,26 +1,69 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMarcaDto } from './dto/create-marca.dto';
 import { UpdateMarcaDto } from './dto/update-marca.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class MarcaService {
-  create(createMarcaDto: CreateMarcaDto) {
-    return 'This action adds a new marca';
+
+  constructor(private prisma: PrismaService,) {}
+  
+
+  async create(createMarcaDto: CreateMarcaDto) {
+    //#TODO: hacer create de marca 
+
+    return 'marca'; // Retornamos la marca creada
   }
 
-  findAll() {
-    return `This action returns all marca`;
+  async findAll() {
+    // return `This action returns all marca`;
+    return this.prisma.marca.findMany();
+    
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} marca`;
+  async findOne(id: number) {
+    return this.prisma.marca.findUnique(
+      {
+        where: { id },
+      }
+    );
   }
 
-  update(id: number, updateMarcaDto: UpdateMarcaDto) {
-    return `This action updates a #${id} marca`;
+  async update(id: number, updateMarcaDto: UpdateMarcaDto) {
+    // return `This action updates a #${id} marca`;
+
+    const marcaFind = await this.findOne(id);
+
+    if (!marcaFind) {
+      throw new NotFoundException(
+        `La marca con la id ${id} no se ha encontrado`,
+      );
+    }
+    
+    //para actualizar 
+    const marca = await this.prisma.marca.update({
+      where: { id },
+      data: updateMarcaDto,
+    }
+  )
+
+    return marca
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} marca`;
+  async remove(id: number) {
+    const marcaFind = await this.findOne(id);
+    if (!marcaFind) {
+      throw new NotFoundException(
+        `La marca con la id ${id} no se ha encontrado`,
+      );
+    }
+
+    await this.prisma.marca.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+
+    return `La marca con ID ${id} se ha eliminado`;
   }
 }
