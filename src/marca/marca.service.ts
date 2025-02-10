@@ -22,7 +22,7 @@ export class MarcaService {
 
     const marca = await this.prisma.marca.create({
       data: {
-        nombre:nombre,
+        nombre: nombre,
         idPais: idPais,
         idUsuario: idUsuario ?? null,
       },
@@ -84,4 +84,7 @@ export class MarcaService {
 
     return `La marca con ID ${id} se ha eliminado`;
   }
+
+  
+
 }
