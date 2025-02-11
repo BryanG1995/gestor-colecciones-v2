@@ -10,6 +10,7 @@ export class MarcaService {
 
 
   async create(createMarcaDto: CreateMarcaDto) {
+
     const { idPais, idUsuario, nombre } = createMarcaDto;
 
     const marcaExistente = await this.prisma.marca.findFirst({
@@ -35,13 +36,50 @@ export class MarcaService {
 
   async findAll() {
     // return `This action returns all marca`;
-    return this.prisma.marca.findMany();
+    return this.prisma.marca.findMany({
+      select:{
+        id:true,
+        nombre:true,
+        pais:{
+          select:{
+            id:true,
+            nombre:true,
+          }
+        },
+        usuario:{
+          select:{
+            id:true,
+            nombre:true,
+            email:true,
+          }
+        }
+      }
+
+
+    });
 
   }
 
   async findOne(id: number) {
     return this.prisma.marca.findUnique(
       {
+        select:{
+          id:true,
+          nombre:true,
+          pais:{
+            select:{
+              id:true,
+              nombre:true,
+            }
+          },
+          usuario:{
+            select:{
+              id:true,
+              nombre:true,
+              email:true,
+            }
+          }
+        },
         where: { id },
       }
     );
