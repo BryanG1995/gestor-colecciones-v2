@@ -91,7 +91,7 @@ model show {
 model usuario {
   id            BigInt          @id(map: "usuario_id_primary") @unique @default(autoincrement())
   nombre        String          @db.VarChar(255)
-  email         String          @db.VarChar(255) @unique
+  email         String          @unique @db.VarChar(255)
   password      String          @db.VarChar(255)
   createdAt     DateTime        @default(now()) @map("created_at")
   updatedAt     DateTime        @updatedAt @map("updated_at")

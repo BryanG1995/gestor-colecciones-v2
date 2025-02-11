@@ -14,7 +14,7 @@ export class MarcaService {
     const { idPais, idUsuario, nombre } = createMarcaDto;
 
     const marcaExistente = await this.prisma.marca.findFirst({
-      where: { nombre: createMarcaDto.nombre },
+      where: { nombre: createMarcaDto?.nombre ?? null },
     });
 
     if (marcaExistente) {
@@ -123,6 +123,6 @@ export class MarcaService {
     return `La marca con ID ${id} se ha eliminado`;
   }
 
-  
+  //TODO: crear funcion para validar si existe el valor a revisar 
 
 }
