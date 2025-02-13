@@ -17,7 +17,13 @@ export class UsuarioService {
 
   async findAll() {
     // return this.prisma.usuario.findMany();
-    const usuario = this.prisma.usuario.findMany();
+    const usuario = this.prisma.usuario.findMany({
+      select:{
+        id: true,
+        nombre: true,
+        email: true,
+      }
+    });
   
     
     return usuario
@@ -26,6 +32,11 @@ export class UsuarioService {
   async findOne(id: number) {
     const usuario = await this.prisma.usuario.findUnique(
       {
+        select:{
+          id: true,
+          nombre: true,
+          email: true,
+        },
         where: { id },
       }
     );

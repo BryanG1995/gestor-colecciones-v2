@@ -15,12 +15,21 @@ export class PaisService {
   }
 
   async findAll() {
-    return this.prisma.pais.findMany();
+    return this.prisma.pais.findMany({
+      select:{
+        id:true,
+        nombre:true
+      }
+    });
   }
 
   async findOne(id: number) {
     return await this.prisma.pais.findUnique(
       {
+        select:{
+          id:true,
+          nombre:true
+        },
         where: { id },
       }
     );
