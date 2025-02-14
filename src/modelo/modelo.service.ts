@@ -2,6 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { CreateModeloDto } from './dto/create-modelo.dto';
 import { UpdateModeloDto } from './dto/update-modelo.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { findEntityOrFail } from 'src/common/helpers/find-entity.helper';
 
 @Injectable()
 export class ModeloService {
@@ -78,13 +79,7 @@ export class ModeloService {
   }
 
   async update(id: number, updateModeloDto: UpdateModeloDto) {
-    const modeloFind = await this.findOne(id);
-
-    if (!modeloFind) {
-      throw new NotFoundException(
-        `El modelo con la id ${id} no se ha encontrado`,
-      );
-    }
+    await findEntityOrFail(this.prisma, 'modelo', id)
 
     //para actualizar 
     const modelo = await this.prisma.modelo.update({
@@ -98,19 +93,14 @@ export class ModeloService {
 
   async remove(id: number) {
 
-    const modeloFind = await this.findOne(id);
-    if (!modeloFind) {
-      throw new NotFoundException(
-        `El modelo con la id ${id} no se ha encontrado`,
-      );
-    }
+    const modeloFind = await findEntityOrFail(this.prisma, 'modelo', id) as { nombre: string };
 
     await this.prisma.modelo.update({
       where: { id },
       data: { deletedAt: new Date() },
     });
 
-    return `El modelo con la ID ${id} se ha eliminado`;
+    return `El modelo con ID ${id} ${modeloFind.nombre} se ha eliminado`;
 
   }
 }

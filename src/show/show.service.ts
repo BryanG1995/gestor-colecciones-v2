@@ -1,26 +1,69 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateShowDto } from './dto/create-show.dto';
 import { UpdateShowDto } from './dto/update-show.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { findEntityOrFail } from 'src/common/helpers/find-entity.helper';
 
 @Injectable()
 export class ShowService {
-  create(createShowDto: CreateShowDto) {
-    return 'This action adds a new show';
+
+  constructor(private prisma: PrismaService,) { }
+  async create(createShowDto: CreateShowDto) {
+    const show = await this.prisma.show.create({
+      data: createShowDto,
+    })
+    return show;
   }
 
   findAll() {
-    return `This action returns all show`;
+    return this.prisma.show.findMany({
+      select: {
+        id: true,
+        nombre: true
+      }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} show`;
+  async findOne(id: number) {
+    return await this.prisma.show.findUnique(
+      {
+        select: {
+          id: true,
+          nombre: true
+        },
+        where: { id },
+      }
+    );
   }
 
-  update(id: number, updateShowDto: UpdateShowDto) {
-    return `This action updates a #${id} show`;
+  async update(id: number, updateShowDto: UpdateShowDto) {
+
+    await findEntityOrFail(this.prisma, 'show', id)
+
+    //para actualizar 
+    const show = await this.prisma.show.update({
+      where: { id },
+      data: updateShowDto,
+    }
+    )
+
+    return show
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} show`;
+  async remove(id: number) {
+    const showFind = await findEntityOrFail(this.prisma, 'show', id) as { nombre: string };
+
+    await this.prisma.show.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+
+    return `El show con ID ${id} ${showFind.nombre} se ha eliminado`;
+
+
   }
+
+
+
+
 }
