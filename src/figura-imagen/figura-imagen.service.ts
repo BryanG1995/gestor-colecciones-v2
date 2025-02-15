@@ -1,26 +1,79 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFiguraImagenDto } from './dto/create-figura-imagen.dto';
 import { UpdateFiguraImagenDto } from './dto/update-figura-imagen.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { findEntityOrFail } from 'src/common/helpers/find-entity.helper';
 
 @Injectable()
 export class FiguraImagenService {
-  create(createFiguraImagenDto: CreateFiguraImagenDto) {
-    return 'This action adds a new figuraImagen';
+  constructor(private prisma: PrismaService,) { }
+
+
+  async create(createFiguraImagenDto: CreateFiguraImagenDto) {
+
+    const figuraImagen = await this.prisma.figuraImagen.create({
+      data: createFiguraImagenDto,
+    })
+    return figuraImagen;
   }
 
-  findAll() {
-    return `This action returns all figuraImagen`;
+  async findAll() {
+    return await this.prisma.figuraImagen.findMany({
+      select: {
+        id: true,
+        imagenUrl: true,
+        descripcion: true,
+        figura: {
+          select: {
+            id: true,
+            nombre: true,
+          }
+        }
+      }
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} figuraImagen`;
+  async findOne(id: number) {
+    return await this.prisma.figuraImagen.findMany({
+      select: {
+        id: true,
+        imagenUrl: true,
+        descripcion: true,
+        figura: {
+          select: {
+            id: true,
+            nombre: true,
+          }
+        }
+      },
+      where: { id },
+    });
   }
 
-  update(id: number, updateFiguraImagenDto: UpdateFiguraImagenDto) {
-    return `This action updates a #${id} figuraImagen`;
+  async update(id: number, updateFiguraImagenDto: UpdateFiguraImagenDto) {
+
+    await findEntityOrFail(this.prisma, 'figuraImagen', id)
+    //para actualizar 
+    const figuraImagen = await this.prisma.figuraImagen.update({
+      where: { id },
+      data: updateFiguraImagenDto,
+    }
+    )
+
+    return figuraImagen
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} figuraImagen`;
+  async remove(id: number) {
+    const figuraImagenFind = await findEntityOrFail(this.prisma, 'figuraImagen', id) as { nombre: string };
+
+    await this.prisma.figuraImagen.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+
+    return `La imagen con ID ${id} ${figuraImagenFind.nombre} se ha eliminado`;
+
+
+
   }
 }

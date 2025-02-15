@@ -36,8 +36,8 @@ model figura {
 model figuraImagen {
   id          BigInt    @id(map: "figuraimagen_id_primary") @unique @default(autoincrement())
   idFigura    BigInt
-  imagenUrl   BigInt?
-  descripcion BigInt
+  imagenUrl   String?
+  descripcion String
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
   deletedAt   DateTime? @map("deleted_at") // Soft delete

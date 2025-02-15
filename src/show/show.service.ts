@@ -15,8 +15,8 @@ export class ShowService {
     return show;
   }
 
-  findAll() {
-    return this.prisma.show.findMany({
+  async findAll() {
+    return await this.prisma.show.findMany({
       select: {
         id: true,
         nombre: true
