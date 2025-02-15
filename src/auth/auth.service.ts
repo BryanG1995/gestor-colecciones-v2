@@ -37,7 +37,7 @@ export class AuthService {
       password: hashedPassword
     });
 
-    console.trace(usuario)
+    
 
     return this.generatedJWT(usuario);
   }

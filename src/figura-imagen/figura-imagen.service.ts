@@ -3,17 +3,30 @@ import { CreateFiguraImagenDto } from './dto/create-figura-imagen.dto';
 import { UpdateFiguraImagenDto } from './dto/update-figura-imagen.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { findEntityOrFail } from 'src/common/helpers/find-entity.helper';
+import { SupabaseService } from 'src/supabase/supabase.service';
 
 @Injectable()
 export class FiguraImagenService {
-  constructor(private prisma: PrismaService,) { }
+  constructor(private prisma: PrismaService,
+    private readonly supabaseService: SupabaseService
+  ) { }
 
 
-  async create(createFiguraImagenDto: CreateFiguraImagenDto) {
+  async create(createFiguraImagenDto: CreateFiguraImagenDto, file: any) {
+    if (!file) throw new Error('No se proporcionó una imagen');
+  
+    // Subir imagen a Supabase
+    const uploadResult = await this.supabaseService.uploadImage(file, `figuras/${createFiguraImagenDto.idFigura}`);
+
+   
 
     const figuraImagen = await this.prisma.figuraImagen.create({
-      data: createFiguraImagenDto,
-    })
+      data: {
+        idFigura: BigInt(createFiguraImagenDto.idFigura),
+        imagenUrl: uploadResult.url,
+        descripcion: createFiguraImagenDto.descripcion,
+      },
+    });
     return figuraImagen;
   }
 

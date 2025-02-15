@@ -39,7 +39,6 @@ export class ShowService {
   async update(id: number, updateShowDto: UpdateShowDto) {
 
     await findEntityOrFail(this.prisma, 'show', id)
-
     //para actualizar 
     const show = await this.prisma.show.update({
       where: { id },

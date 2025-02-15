@@ -1,15 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { FiguraImagenService } from './figura-imagen.service';
 import { CreateFiguraImagenDto } from './dto/create-figura-imagen.dto';
 import { UpdateFiguraImagenDto } from './dto/update-figura-imagen.dto';
 
 @Controller('figura-imagen')
 export class FiguraImagenController {
-  constructor(private readonly figuraImagenService: FiguraImagenService) {}
+  constructor(private readonly figuraImagenService: FiguraImagenService) { }
 
   @Post()
-  create(@Body() createFiguraImagenDto: CreateFiguraImagenDto) {
-    return this.figuraImagenService.create(createFiguraImagenDto);
+  @UseInterceptors(FileInterceptor('file'))
+  async create(
+    @Body() createFiguraImagenDto: CreateFiguraImagenDto,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+
+  
+    return this.figuraImagenService.create(createFiguraImagenDto, file);
   }
 
   @Get()
