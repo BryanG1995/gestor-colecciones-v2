@@ -16,19 +16,20 @@ datasource db {
 }
 
 model figura {
-  id            BigInt          @id(map: "figura_id_primary") @unique @default(autoincrement())
-  nombre        String          @db.VarChar(255)
-  idModelo      BigInt
-  idShow        BigInt
-  fechaCompra   DateTime?       @db.Date
-  precio        Int             @default(0)
-  createdAt     DateTime        @default(now()) @map("created_at")
-  updatedAt     DateTime        @updatedAt @map("updated_at")
-  deletedAt     DateTime?       @map("deleted_at") // Soft delete
-  modelo        modelo          @relation(fields: [idModelo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "figura_idmodelo_foreign")
-  show          show            @relation(fields: [idShow], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "figura_idshow_foreign")
-  figuraImagen  figuraImagen[]
-  usuarioFigura usuarioFigura[]
+  id           BigInt         @id(map: "figura_id_primary") @unique @default(autoincrement())
+  nombre       String         @db.VarChar(255)
+  idModelo     BigInt
+  idShow       BigInt
+  fechaCompra  DateTime?      @db.Date
+  precio       Int            @default(0)
+  idUsuario    BigInt?
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  deletedAt    DateTime?      @map("deleted_at") // Soft delete
+  modelo       modelo         @relation(fields: [idModelo], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "figura_idmodelo_foreign")
+  show         show           @relation(fields: [idShow], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "figura_idshow_foreign")
+  usuario      usuario?       @relation(fields: [idUsuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "figura_idusuario_foreign")
+  figuraImagen figuraImagen[]
 
   @@index([id], map: "figura_id_index")
 }
@@ -89,25 +90,14 @@ model show {
 }
 
 model usuario {
-  id            BigInt          @id(map: "usuario_id_primary") @unique @default(autoincrement())
-  nombre        String          @db.VarChar(255)
-  email         String          @unique @db.VarChar(255)
-  password      String          @db.VarChar(255)
-  createdAt     DateTime        @default(now()) @map("created_at")
-  updatedAt     DateTime        @updatedAt @map("updated_at")
-  deletedAt     DateTime?       @map("deleted_at") // Soft delete
-  marca         marca[]
-  modelo        modelo[]
-  usuarioFigura usuarioFigura[]
-}
-
-model usuarioFigura {
-  id        BigInt    @id(map: "usuariofigura_id_primary") @unique @default(autoincrement())
-  idUsuario BigInt
-  idFigura  BigInt
+  id        BigInt    @id(map: "usuario_id_primary") @unique @default(autoincrement())
+  nombre    String    @db.VarChar(255)
+  email     String    @unique @db.VarChar(255)
+  password  String    @db.VarChar(255)
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at") // Soft delete
-  figura    figura    @relation(fields: [idFigura], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuariofigura_idfigura_foreign")
-  usuario   usuario   @relation(fields: [idUsuario], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "usuariofigura_idusuario_foreign")
+  marca     marca[]
+  modelo    modelo[]
+  figura    figura[]
 }

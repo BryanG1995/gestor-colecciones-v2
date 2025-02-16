@@ -19,6 +19,11 @@ export class CreateFiguraDto {
   @IsInt()
   @IsNotEmpty()
   @Min(1)
+  idUsuario: number;
+
+  @IsInt()
+  @IsNotEmpty()
+  @Min(1)
   idShow: number;
 
   @IsOptional()
@@ -28,4 +33,6 @@ export class CreateFiguraDto {
   @IsNotEmpty()
   @Min(1)
   precio: number;
+
+
 }

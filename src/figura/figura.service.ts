@@ -41,6 +41,13 @@ export class FiguraService {
             id:true,
             nombre:true
           }
+        },
+        usuario:{
+          select:{
+            id:true,
+            nombre:true,
+            email:true
+          }
         }
       }
     })
@@ -62,6 +69,13 @@ export class FiguraService {
           select:{
             id:true,
             nombre:true
+          }
+        },
+        usuario:{
+          select:{
+            id:true,
+            nombre:true,
+            email:true
           }
         }
       },
