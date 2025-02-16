@@ -9,14 +9,13 @@ import { ModeloModule } from './modelo/modelo.module';
 import { PaisModule } from './pais/pais.module';
 import { ShowModule } from './show/show.module';
 import { AuthModule } from './auth/auth.module';
-import { UsuarioFiguraModule } from './usuario-figura/usuario-figura.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { BigIntInterceptor } from './common/interceptor/bigInt.interceptor';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 
 
 @Module({
-  imports: [UsuarioModule, FiguraModule, FiguraImagenModule, MarcaModule, ModeloModule, PaisModule, ShowModule, UsuarioFiguraModule, PrismaModule,AuthModule],
+  imports: [UsuarioModule, FiguraModule, FiguraImagenModule, MarcaModule, ModeloModule, PaisModule, ShowModule , PrismaModule,AuthModule],
   controllers: [AppController],
   providers: [AppService,
     {

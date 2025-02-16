@@ -2,7 +2,7 @@
 import {Modelo} from '../../modelo/entities/modelo.entity'
 import {Show} from '../../show/entities/show.entity'
 import {FiguraImagen} from '../../figura-imagen/entities/figura-imagen.entity'
-import {UsuarioFigura} from '../../usuario-figura/entities/usuario-figura.entity'
+
 import { Usuario } from 'src/usuario/entities/usuario.entity'
 import { BaseEntity } from 'src/common/entities/base.entity';
 
@@ -18,5 +18,5 @@ modelo?: Modelo ;
 show?: Show ;
 usuario?: Usuario ;
 figuraImagen?: FiguraImagen[] ;
-usuarioFigura?: UsuarioFigura[] ;
+
 }

@@ -8,9 +8,9 @@ import { findEntityOrFail } from 'src/common/helpers/find-entity.helper';
 export class FiguraService {
 
   constructor(private prisma: PrismaService,) { }
- async create(createFiguraDto: CreateFiguraDto) {
+  async create(createFiguraDto: CreateFiguraDto) {
 
-  const { idModelo, idShow, nombre,precio,fechaCompra } = createFiguraDto;
+    const { idModelo, idShow, nombre, precio, fechaCompra } = createFiguraDto;
 
     const figura = await this.prisma.figura.create({
       data: {
@@ -26,27 +26,35 @@ export class FiguraService {
 
   async findAll() {
     return await this.prisma.figura.findMany({
-      select:{
-        nombre:true,
-        fechaCompra:true,
-        precio:true,
-        modelo:{
-          select:{
-            id:true,
-            nombre:true,
+      select: {
+        id: true,
+        nombre: true,
+        fechaCompra: true,
+        precio: true,
+        modelo: {
+          select: {
+            id: true,
+            nombre: true,
+            marca: {
+              select: {
+                id: true,
+                nombre: true
+              }
+            }
+          }
+
+        },
+        show: {
+          select: {
+            id: true,
+            nombre: true
           }
         },
-        show:{
-          select:{
-            id:true,
-            nombre:true
-          }
-        },
-        usuario:{
-          select:{
-            id:true,
-            nombre:true,
-            email:true
+        usuario: {
+          select: {
+            id: true,
+            nombre: true,
+            email: true
           }
         }
       }
@@ -55,27 +63,35 @@ export class FiguraService {
 
   async findOne(id: number) {
     return await this.prisma.figura.findMany({
-      select:{
-        nombre:true,
-        fechaCompra:true,
-        precio:true,
-        modelo:{
-          select:{
-            id:true,
-            nombre:true,
+      select: {
+        id: true,
+        nombre: true,
+        fechaCompra: true,
+        precio: true,
+        modelo: {
+          select: {
+            id: true,
+            nombre: true,
+            marca: {
+              select: {
+                id: true,
+                nombre: true
+              }
+            }
+          }
+
+        },
+        show: {
+          select: {
+            id: true,
+            nombre: true
           }
         },
-        show:{
-          select:{
-            id:true,
-            nombre:true
-          }
-        },
-        usuario:{
-          select:{
-            id:true,
-            nombre:true,
-            email:true
+        usuario: {
+          select: {
+            id: true,
+            nombre: true,
+            email: true
           }
         }
       },
@@ -84,16 +100,16 @@ export class FiguraService {
   }
 
   async update(id: number, updateFiguraDto: UpdateFiguraDto) {
-        await findEntityOrFail(this.prisma, 'figura', id)
-    
-        //para actualizar 
-        const figura = await this.prisma.figura.update({
-          where: { id },
-          data: updateFiguraDto,
-        }
-        )
-    
-        return figura
+    await findEntityOrFail(this.prisma, 'figura', id)
+
+    //para actualizar 
+    const figura = await this.prisma.figura.update({
+      where: { id },
+      data: updateFiguraDto,
+    }
+    )
+
+    return figura
   }
 
   async remove(id: number) {
