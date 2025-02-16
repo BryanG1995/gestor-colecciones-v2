@@ -10,7 +10,7 @@ export class Usuario extends BaseEntity{
 nombre: string ;
 email: string ;
 
-@Exclude()
+// @Exclude()
 password: string ;
 
 
@@ -18,3 +18,4 @@ marca?: Marca[] ;
 modelo?: Modelo[] ;
 usuarioFigura?: UsuarioFigura[] ;
 }
+

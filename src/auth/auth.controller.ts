@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { CreateUsuarioDto } from 'src/usuario/dto/create-usuario.dto';
 import { AuthGuard } from './auth.guard';
 import { QueryFailedExceptionFilter } from '../common/middleware/usuario.filter';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 @UseFilters(QueryFailedExceptionFilter)
@@ -11,8 +12,8 @@ export class AuthController {
 
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    logIn(@Body() createUsuarioDto: CreateUsuarioDto) {
-        return this.authService.logIn(createUsuarioDto);
+    logIn(@Body() loginDto: LoginDto) {
+        return this.authService.logIn(loginDto);
     }
 
     @HttpCode(HttpStatus.OK)

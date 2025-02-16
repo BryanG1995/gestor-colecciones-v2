@@ -54,8 +54,17 @@ export class UsuarioService {
   }
 
   async findByUser(email: string): Promise<Usuario | undefined> {
-    return this.prisma.usuario.findFirst(
+    return await this.prisma.usuario.findFirst(
       {
+        select:{
+          id: true,
+          nombre: true,
+          email: true,
+          password: true,
+          createdAt: true,
+          updatedAt: true,
+          deletedAt: true,
+        },
         where: { email },
       }
     );

@@ -19,12 +19,12 @@ export function excludeDeleted(): Prisma.Middleware {
     if (Array.isArray(result)) {
       // Si es un array, eliminamos los campos 'password' y 'deletedAt' de cada objeto
       result.forEach(item => {
-        delete item.password;
+        // delete item.password;
         delete item.deletedAt;
       });
     } else if (result) {
       // Si es un solo objeto, eliminamos los campos directamente
-      delete result.password;
+      // delete result.password;
       delete result.deletedAt;
     }
 
