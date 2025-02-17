@@ -8,10 +8,10 @@ import { findEntityOrFail } from 'src/common/helpers/find-entity.helper';
 export class FiguraService {
 
   constructor(private prisma: PrismaService,) { }
-  async create(createFiguraDto: CreateFiguraDto) {
+  async create(createFiguraDto: CreateFiguraDto,user : any) {
 
     const { idModelo, idShow, nombre, precio, fechaCompra } = createFiguraDto;
-
+    console.log(user.id)
     const figura = await this.prisma.figura.create({
       data: {
         nombre: nombre,
@@ -19,12 +19,17 @@ export class FiguraService {
         fechaCompra: fechaCompra ?? null,
         idShow: idShow,
         precio: precio,
+        idUsuario: user.id
+
       },
     })
     return figura;
+    // console.log(user)
+    // return user
   }
 
   async findAll() {
+    //#TODO: find segun el usuario que está activo y no toda la data 
     return await this.prisma.figura.findMany({
       select: {
         id: true,

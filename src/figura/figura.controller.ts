@@ -1,15 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards,Request } from '@nestjs/common';
 import { FiguraService } from './figura.service';
 import { CreateFiguraDto } from './dto/create-figura.dto';
 import { UpdateFiguraDto } from './dto/update-figura.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('figura')
 export class FiguraController {
   constructor(private readonly figuraService: FiguraService) {}
 
   @Post()
-  create(@Body() createFiguraDto: CreateFiguraDto) {
-    return this.figuraService.create(createFiguraDto);
+  create(@Request() req ,@Body() createFiguraDto: CreateFiguraDto) {
+    
+    return this.figuraService.create(createFiguraDto,req.user);
   }
 
   @Get()

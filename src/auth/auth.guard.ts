@@ -4,11 +4,14 @@ import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './jwt.constant';
 
+
+
 @Injectable()
 export class AuthGuard implements CanActivate {
 
 constructor( 
-  private jwtService: JwtService)
+  private jwtService: JwtService,
+ )
   
   {}
 
@@ -30,7 +33,17 @@ constructor(
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       //#TODO: obtener usuario y extraer lo necesario desde aqui y no desde el controlador del endpoint
-      req['email'] = payload;
+      
+
+      //  req['email'] = payload;
+
+      req.user = {
+        id: payload.id,  
+        email: payload.email,
+      
+
+      };
+      
       
     } catch {
       throw new UnauthorizedException();

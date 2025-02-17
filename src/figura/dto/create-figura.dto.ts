@@ -16,10 +16,11 @@ export class CreateFiguraDto {
   @Min(1)
   idModelo: number;
 
-  @IsInt()
-  @IsNotEmpty()
-  @Min(1)
-  idUsuario: number;
+  // @IsInt()
+  // @IsNotEmpty()
+  // @Min(1)
+
+  // idUsuario: number;
 
   @IsInt()
   @IsNotEmpty()

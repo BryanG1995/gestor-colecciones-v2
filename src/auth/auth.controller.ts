@@ -31,6 +31,7 @@ export class AuthController {
     @Get('check')
     @UseGuards(AuthGuard)
     check(@Request() req) {
-        return this.authService.getByUser(req.user);
+        
+        return this.authService.getByUser(req.user.email);
     }
 }

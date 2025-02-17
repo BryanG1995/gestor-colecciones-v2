@@ -44,9 +44,9 @@ export class AuthService {
   }
 
   async logIn(loginDto: LoginDto): Promise<any> {
-    console.log(loginDto);
+    
     const userFind = await this.usuarioService.findByUser(loginDto.email);
-    console.log(userFind)
+    
     const isPasswordValid = await this.comparePassword(loginDto.password, userFind.password);
 
     
@@ -60,7 +60,7 @@ export class AuthService {
   }
 
   async comparePassword(password: string, hashedPassword: string): Promise<boolean> {
-    console.log(password, hashedPassword);
+    
     return await bcrypt.compare(password, hashedPassword);
   }
 
@@ -69,7 +69,8 @@ export class AuthService {
   }
 
   public async generatedJWT(user: any) {
-    const getUser = await this.usuarioService.findByUser(user.user);
+    
+    const getUser = await this.usuarioService.findByUser(user.email);
     const payload = {
       email: getUser.email,
       id: getUser.id.toString()
