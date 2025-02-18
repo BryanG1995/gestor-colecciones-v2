@@ -54,6 +54,7 @@ export class UsuarioService {
   }
 
   async findByUser(email: string): Promise<Usuario | undefined> {
+    
     return await this.prisma.usuario.findFirst(
       {
         select:{

@@ -11,7 +11,7 @@ export class FiguraService {
   async create(createFiguraDto: CreateFiguraDto,user : any) {
 
     const { idModelo, idShow, nombre, precio, fechaCompra } = createFiguraDto;
-    console.log(user.id)
+    
     const figura = await this.prisma.figura.create({
       data: {
         nombre: nombre,
@@ -24,11 +24,11 @@ export class FiguraService {
       },
     })
     return figura;
-    // console.log(user)
+    
     // return user
   }
 
-  async findAll() {
+  async findAll(user : any) {
     //#TODO: find segun el usuario que está activo y no toda la data 
     return await this.prisma.figura.findMany({
       select: {
@@ -62,11 +62,14 @@ export class FiguraService {
             email: true
           }
         }
-      }
+        
+      },
+      where: { idUsuario: user.id },
+      orderBy: { nombre: 'asc' }
     })
   }
 
-  async findOne(id: number) {
+  async findOne(id: number,user : any) {
     return await this.prisma.figura.findMany({
       select: {
         id: true,
@@ -100,7 +103,8 @@ export class FiguraService {
           }
         }
       },
-      where: { id },
+      where: { id , idUsuario: user.id },
+      orderBy: { nombre: 'asc' }
     })
   }
 

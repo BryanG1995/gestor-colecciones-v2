@@ -16,13 +16,13 @@ export class FiguraController {
   }
 
   @Get()
-  findAll() {
-    return this.figuraService.findAll();
+  findAll(@Request() req ) {
+    return this.figuraService.findAll(req.user);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.figuraService.findOne(+id);
+  findOne(@Request() req ,@Param('id') id: string) {
+    return this.figuraService.findOne(+id,req.user);
   }
 
   @Patch(':id')

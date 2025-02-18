@@ -1,4 +1,4 @@
-import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ExecutionContext, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UsuarioService } from '../usuario/usuario.service';
 import { CreateUsuarioDto } from '../usuario/dto/create-usuario.dto';
 import { LoginDto } from './dto/login.dto';
@@ -46,6 +46,10 @@ export class AuthService {
   async logIn(loginDto: LoginDto): Promise<any> {
     
     const userFind = await this.usuarioService.findByUser(loginDto.email);
+     if (!userFind) {
+        throw new NotFoundException('Clave o correo incorrecto ');
+      }
+    
     
     const isPasswordValid = await this.comparePassword(loginDto.password, userFind.password);
 
@@ -71,11 +75,13 @@ export class AuthService {
   public async generatedJWT(user: any) {
     
     const getUser = await this.usuarioService.findByUser(user.email);
+    
     const payload = {
       email: getUser.email,
-      id: getUser.id.toString()
+      id: getUser.id.toString(),
+      nombre: getUser.nombre
     };
-
+    
     return {
       token: this.signJWT({
         payload,
@@ -84,6 +90,7 @@ export class AuthService {
       }),
       id: getUser.id,
       email: getUser.email,
+      nombre: getUser.nombre
     };
   }
 }
