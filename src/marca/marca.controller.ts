@@ -1,25 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { MarcaService } from './marca.service';
 import { CreateMarcaDto } from './dto/create-marca.dto';
 import { UpdateMarcaDto } from './dto/update-marca.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('marca')
 export class MarcaController {
   constructor(private readonly marcaService: MarcaService) {}
 
   @Post()
-  create(@Body() createMarcaDto: CreateMarcaDto) {
-    return this.marcaService.create(createMarcaDto);
+  create(@Request() req ,@Body() createMarcaDto: CreateMarcaDto) {
+    return this.marcaService.create(createMarcaDto,req.user);
   }
 
   @Get()
-  findAll() {
-    return this.marcaService.findAll();
+  findAll(@Request() req) {
+    return this.marcaService.findAll(req.user);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.marcaService.findOne(+id);
+  findOne(@Request() req ,@Param('id') id: string) {
+    return this.marcaService.findOne(+id,req.user);
   }
 
   @Patch(':id')

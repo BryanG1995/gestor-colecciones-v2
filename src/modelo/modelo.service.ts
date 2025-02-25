@@ -9,9 +9,9 @@ export class ModeloService {
 
   constructor(private prisma: PrismaService,) { }
 
-  async create(createModeloDto: CreateModeloDto) {
+  async create(createModeloDto: CreateModeloDto,user : any) {
 
-    const { idMarca, idUsuario, nombre } = createModeloDto;
+    const { idMarca, nombre } = createModeloDto;
 
     const modeloExiste = await this.prisma.marca.findFirst({
       where: { nombre: createModeloDto.nombre },
@@ -25,13 +25,13 @@ export class ModeloService {
       data: {
         nombre: nombre,
         idMarca: idMarca,
-        idUsuario: idUsuario ?? null,
+        idUsuario: user.id
       },
     })
     return marca;
   }
 
-  async findAll() {
+  async findAll(user : any) {
     return await this.prisma.modelo.findMany({
       select: {
         id: true,
@@ -49,11 +49,17 @@ export class ModeloService {
             email: true,
           }
         }
+      },
+      where:{
+        OR: [
+          {idUsuario: user.id},
+          {idUsuario: null}
+        ]
       }
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number,user : any) {
     return await this.prisma.modelo.findUnique(
       {
         select: {
@@ -73,7 +79,13 @@ export class ModeloService {
             }
           }
         },
-        where: { id },
+        where: { 
+          id ,
+          OR: [
+            {idUsuario: user.id},
+            {idUsuario: null}
+          ]
+        },
       }
     );
   }
