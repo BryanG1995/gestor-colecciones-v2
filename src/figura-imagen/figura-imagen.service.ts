@@ -63,6 +63,19 @@ export class FiguraImagenService {
     });
   }
 
+  async findFigureImages(id: number) {
+    return await this.prisma.figuraImagen.findMany({
+      select: {
+
+        imagenUrl: true,
+        descripcion: true,
+
+      },
+      where: { idFigura:id },
+    });
+  }
+
+
   async update(id: number, updateFiguraImagenDto: UpdateFiguraImagenDto) {
 
     await findEntityOrFail(this.prisma, 'figuraImagen', id)

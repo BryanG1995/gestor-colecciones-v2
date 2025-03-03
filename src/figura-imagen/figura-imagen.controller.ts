@@ -29,6 +29,11 @@ export class FiguraImagenController {
     return this.figuraImagenService.findOne(+id);
   }
 
+  @Get('figura/:id') 
+  findFigureImage(@Param('id') id: string) {
+    return this.figuraImagenService.findFigureImages(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateFiguraImagenDto: UpdateFiguraImagenDto) {
     return this.figuraImagenService.update(+id, updateFiguraImagenDto);
